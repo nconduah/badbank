@@ -274,8 +274,8 @@ app.get('/account/balance/:email', function (req, res) {
         .value();
 
     if(account == null) {
-        console.log('Unable to retrive details account for', email);
-        res.send('Unable to retrive details account for', email);
+        console.log('Unable to retrive details account for ' + email);
+        res.send('Unable to retrive details account for '+ email);
         return;
     }
 
@@ -289,11 +289,11 @@ app.get('/account/balance/:email', function (req, res) {
 
     if(account == null) {
         console.log('Unable to check balance account for', email);
-        res.send(account.value());
+        res.send('Unable to check balance account for', email);
     }
     else {
         console.log(account.name + '\'s balance was retrieved with balance of ' +  account.balance);
-        res.send(account.balance);
+        res.send(account.name + '\'s balance is ' +  account.balance);
     }
     // YOUR CODE
     // Deposit amount for email

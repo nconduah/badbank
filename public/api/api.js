@@ -14,7 +14,7 @@ function create() {
     var status     = document.getElementById('status');
 
     var url = '/account/create/${name}/${email}/${password}';
-    url = 'http://localhost:3000/account/create/' + name + '/' + email + '/' + password;
+    url = '/account/create/' + name + '/' + email + '/' + password;
 
     superagent
         .get(url)
@@ -25,7 +25,7 @@ function create() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         });  
 }
@@ -50,7 +50,7 @@ function login() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         }); 
 }
@@ -62,8 +62,9 @@ function deposit() {
     // -------------------------------------
     var email  = document.getElementById('depositEmail').value;
     var amount  = document.getElementById('depositAmount').value;
+    var status     = document.getElementById('status');
 
-    var url = 'http://localhost:3000/account/deposit/' + email + '/' + amount;
+    var url = '/account/deposit/' + email + '/' + amount;
 
     superagent
         .get(url)
@@ -74,7 +75,7 @@ function deposit() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         }); 
 }
@@ -86,8 +87,9 @@ function withdraw() {
     // -------------------------------------
     var email  = document.getElementById('withdrawEmail').value;
     var amount  = document.getElementById('withdrawAmount').value;
+    var status     = document.getElementById('status');
 
-    var url = 'http://localhost:3000/account/withdraw/' + email + '/' + amount;
+    var url = '/account/withdraw/' + email + '/' + amount;
 
     superagent
         .get(url)
@@ -98,7 +100,7 @@ function withdraw() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         }); 
 }
@@ -109,8 +111,9 @@ function transactions() {
     //  Get all user transactions
     // -------------------------------------
     var email  = document.getElementById('transactionsEmail').value;
+    var status     = document.getElementById('status');
 
-    var url = 'http://localhost:3000/account/transactions/' + email;
+    var url = '/account/transactions/' + email;
 
     superagent
         .get(url)
@@ -121,7 +124,7 @@ function transactions() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         }); 
 }
@@ -132,8 +135,9 @@ function balance() {
     //  Get user balance
     // -------------------------------------
     var email  = document.getElementById('balanceEmail').value;
+    var status     = document.getElementById('status');
 
-    var url = 'http://localhost:3000/account/balance/' + email;
+    var url = '/account/balance/' + email;
 
     superagent
         .get(url)
@@ -144,7 +148,7 @@ function balance() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         }); 
 }
@@ -154,7 +158,8 @@ function allData() {
     //  YOUR CODE
     //  Get all data
     // -------------------------------------
-    var url = 'http://localhost:3000/account/all';
+    var url = '/account/all';
+    var status     = document.getElementById('status');
 
     superagent
         .get(url)
@@ -165,7 +170,7 @@ function allData() {
             }
             else{
                 console.log(res.body);
-                status.innerHTML = JSON.stringify(res.body)
+                status.innerHTML = JSON.stringify(res.text)
             }
         }); 
 }
