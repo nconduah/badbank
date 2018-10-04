@@ -35,9 +35,11 @@ app.get('/account/create/:name/:email/:password', function (req, res) {
     var email = req.params.email;
     var pswd = req.params.password;
 
-    var existing = db.get('accounts')
-        .find({ email: email, password: pswd })
-        .value();
+    // var existing = db.get('accounts')
+    //     .find({ email: email, password: pswd })
+    //     .value();
+
+    var existing = getAccount(email, { email: email });
 
     if(existing != null){
         console.log('Account with name ' + name + ' already exists!!! Aborting creation');
@@ -50,7 +52,7 @@ app.get('/account/create/:name/:email/:password', function (req, res) {
         email: email, 
         balance: 0, 
         password: pswd, 
-        transactions: [{time: new Date(), Description: "Created account " + name}]
+        transactions: [{Time: new Date(), Action: 'CreateAccount', Amount:'0', Description: "Created account " + name}]
     };
 
     db.get('accounts')
@@ -79,9 +81,11 @@ app.get('/account/login/:email/:password', function (req, res) {
     // Login user - confirm credentials
     var email = req.params.email;
     var pswd = req.params.password;
-    var account = db.get('accounts')
-        .find({ email: email, password: pswd })
-        .value();
+    // var account = db.get('accounts')
+    //     .find({ email: email, password: pswd })
+    //     .value();
+
+    var account = getAccount(email, { email: email, password: pswd });
 
     if(account == null){
         console.log('Unable to authenticate account, credentials for ' + email + ' were incorrect!!! Ensure your email and password are correct');
@@ -89,8 +93,9 @@ app.get('/account/login/:email/:password', function (req, res) {
         return;
     }
 
+
     var transactions = account.transactions;
-    transactions.push({time: new Date(), Description: "Logged into account " + email})
+    transactions.push({Time: new Date(), Action: 'Login', Amount:'0', Description: "Logged into account " + email})
 
     account = db.get('accounts')
         .find({ email: email })
@@ -103,7 +108,7 @@ app.get('/account/login/:email/:password', function (req, res) {
     }
     else {
         console.log('Successfully logged into account ' + account.name);
-        res.send('Successfully logged innto account ' + account.name);
+        res.send('Successfully logged into account ' + account.name);
     }
 
     // If success, return account object    
@@ -115,35 +120,57 @@ app.get('/account/get/:email', function (req, res) {
     // YOUR CODE
     // Return account based on email
     var email = req.params.email;
-    var account = db.get('accounts')
-        .find({ email: email })
-        .value();
+    // var account = db.get('accounts')
+    //     .find({ email: email })
+    //     .value();
 
-    var transactions = account.transactions;
-    transactions.push({time: new Date(), Description: "Retrieved account " + email + " details"})
-
-    account = db.get('accounts')
-        .find({ email: email })
-        .assign({ transactions: transactions })
-        .write();
+    var account = getAccount(email, { email: email });
 
     if(account == null) {
-        console.log('Unable to retrive details account for', email);
-        res.send('Unable to retrive details account for' + email);
+        console.log('Unable to retrive details account for ', email);
+        res.send('Unable to retrive details account for ' + email);
     }
     else {
-        console.log('Successfully retrive account', account.name);
+        var transactions = account.transactions;
+        transactions.push({Time: new Date(), Action: 'GetAccount', Amount:'0', Description: "Retrieved account " + email + " details"})
+    
+        account = db.get('accounts')
+            .find({ email: email })
+            .assign({ transactions: transactions })
+            .write();
+
+        console.log('Successfully retrived account '+ account.name);
         res.send(account);
     }
 });
+
+getAccount = function(email, query){
+    var account = db.get('accounts')
+        .find(query)
+        .value();
+
+    if(account != null) {
+        var transactions = account.transactions;
+        transactions.push({Time: new Date(), Action: 'GetAccount', Amount:'0', Description: "Retrieved account " + email + " details"})
+    
+        account = db.get('accounts')
+            .find({ email: email })
+            .assign({ transactions: transactions })
+            .write();
+    }
+
+    return account;
+}
 
 app.get('/account/deposit/:email/:amount', function (req, res) {
     // get current balance
     var email = req.params.email;
     var depositamount = req.params.amount;
-    var account = db.get('accounts')
-        .find({ email: email })
-        .value();
+    // var account = db.get('accounts')
+    //     .find({ email: email })
+    //     .value();
+
+    var account = getAccount(email, { email: email });
 
     if(account == null) {
         console.log('Unable to retrive details account for' + email);
@@ -155,7 +182,7 @@ app.get('/account/deposit/:email/:amount', function (req, res) {
     var newbalance = currentbalance + parseInt(depositamount);
 
     var transactions = account.transactions;
-    transactions.push({time: new Date(), Description: "Deposited $" + depositamount + " into account " + email})
+    transactions.push({Time: new Date(), Action: 'Deposit', Amount: depositamount,  Description: "Deposited $" + depositamount + " into account " + email})
 
     account = db.get('accounts')
         .find({ email: email })
@@ -179,9 +206,10 @@ app.get('/account/withdraw/:email/:amount', function (req, res) {
     
     var email = req.params.email;
     var withdrawlamount = req.params.amount;
-    var account = db.get('accounts')
-        .find({ email: email })
-        .value();
+    // var account = db.get('accounts')
+    //     .find({ email: email })
+    //     .value();
+    var account = getAccount(email, { email: email });
 
     if(account == null) {
         var message = 'Unable to retrive details account for', email;
@@ -194,7 +222,7 @@ app.get('/account/withdraw/:email/:amount', function (req, res) {
     var newbalance = currentbalance - parseInt(withdrawlamount);
 
     var transactions = account.transactions;
-    transactions.push({time: new Date(), Description: "Withdrew $" + withdrawlamount + " from account " + email})
+    transactions.push({Time: new Date(), Action: 'Withdraw', Amount: withdrawlamount,  Description: "Withdrew $" + withdrawlamount + " from account " + email})
     
     account = db.get('accounts')
         .find({ email: email })
@@ -216,9 +244,10 @@ app.get('/account/withdraw/:email/:amount', function (req, res) {
 
 app.get('/account/transactions/:email', function (req, res) {
     var email = req.params.email;
-    var account = db.get('accounts')
-        .find({ email: email })
-        .value();
+    // var account = db.get('accounts')
+    //     .find({ email: email })
+    //     .value();
+    var account = getAccount(email, { email: email });
 
     if(account == null) {
         var message = 'Unable to retrive details account for', email;
@@ -228,7 +257,7 @@ app.get('/account/transactions/:email', function (req, res) {
     }
 
     var transactions = account.transactions;
-    transactions.push({time: new Date(), Description: "Retrieved transactions for account " + email })
+    transactions.push({tTime: new Date(), Action: 'GetTransactions', Amount:'0',  Description: "Retrieved transactions for account " + email })
 
     account = db.get('accounts')
         .find({ email: email })
@@ -269,9 +298,10 @@ app.get('/account/all', function (req, res) {
 app.get('/account/balance/:email', function (req, res) {
     // get current balance
     var email = req.params.email;
-    var account = db.get('accounts')
-        .find({ email: email })
-        .value();
+    // var account = db.get('accounts')
+    //     .find({ email: email })
+    //     .value();
+    var account = getAccount(email, { email: email });
 
     if(account == null) {
         console.log('Unable to retrive details account for ' + email);
@@ -280,7 +310,7 @@ app.get('/account/balance/:email', function (req, res) {
     }
 
     var transactions = account.transactions;
-    transactions.push({time: new Date(), Description: "Retrived accounts " + email + "'s balance of " + account.balance})
+    transactions.push({Time: new Date(), Action: 'GetBalance', Amount:'0',  Description: "Retrived accounts " + email + "'s balance of " + account.balance})
 
     account = db.get('accounts')
         .find({ email: email })
@@ -303,6 +333,6 @@ app.get('/account/balance/:email', function (req, res) {
 
 // start server
 // -----------------------
-app.listen(80, function(){
-    console.log('Listening on 80 for requests')
+app.listen(3000, function(){
+    console.log('Listening on 3000 for requests')
 })

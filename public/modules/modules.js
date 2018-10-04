@@ -211,14 +211,8 @@ ui.default = `
 ui.allData = `
 <form onsubmit="allData()">
     <div class="form-group card text-white bg-dark mb-3" style="max-width: 18rem;">
-        <div class="card-header">Balance</div>
+        <div class="card-header">All Data</div>
         <div class="card-body">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Email address</span>
-                </div>
-                <input id="allDataEmail" type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Enter Email" required>
-            </div>
             <br/>
 
             <button type="submit" class="btn btn-light">Show All Data</button>
