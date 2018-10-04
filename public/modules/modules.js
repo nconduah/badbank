@@ -54,6 +54,7 @@ ui.createAccount = `
 
             <button type="submit" class="btn btn-light">Create Account</button>
             <br/>
+            <br/>
             <div id="status"></div>
         </div>
     </div> 
@@ -82,6 +83,7 @@ ui.login = `
             <br/>
 
             <button type="submit" class="btn btn-light">Login</button>
+            <br/>
             <br/>
             <div id="status"></div>
         </div>
@@ -112,6 +114,7 @@ ui.deposit = `
 
             <button type="submit" class="btn btn-light">Deposit</button>
             <br/>
+            <br/>
             <div id="status"></div>
         </div>
     </div> 
@@ -141,6 +144,7 @@ ui.withdraw = `
 
             <button type="submit" class="btn btn-light">Withdraw</button>
             <br/>
+            <br/>
             <div id="status"></div>
         </div>
     </div> 
@@ -162,6 +166,7 @@ ui.transactions = `
 
             <button type="submit" class="btn btn-light">Show Transactions</button>
             <br/>
+            <br/>
             <div id="status"></div>
         </div>
     </div> 
@@ -182,6 +187,7 @@ ui.balance = `
             <br/>
 
             <button type="submit" class="btn btn-light">Show Balance</button>
+            <br/>
             <br/>
             <div id="status"></div>
         </div>
@@ -216,6 +222,7 @@ ui.allData = `
             <br/>
 
             <button type="submit" class="btn btn-light">Show All Data</button>
+            <br/>
             <br/>
             <div id="status"></div>
         </div>

@@ -62,12 +62,12 @@ app.get('/account/create/:name/:email/:password', function (req, res) {
         .value();
 
     if(account == null) {
-        console.log('Unable to create account for', name);
-        res.send("failure");
+        console.log('Unable to create account for ' + name);
+        res.send('Failure! unable to create account for' + name);
     }
     else {
         console.log(name + '\'s account was successfully created');
-        res.send("success");
+        res.send('Success. ' + name + '\'s account was successfully created');
     }
     
     // return success or failure string
@@ -84,8 +84,8 @@ app.get('/account/login/:email/:password', function (req, res) {
         .value();
 
     if(account == null){
-        console.log('Unable to authenticate account with email ' + email + ' does not exist!!! Ensure your email and password are correct');
-        res.send('Unable to authenticate account with email ' + email + ' does not exist!!! Ensure your email and password are correct');
+        console.log('Unable to authenticate account, credentials for ' + email + ' were incorrect!!! Ensure your email and password are correct');
+        res.send('Unable to authenticate account, credentials for ' + email + ' were incorrect!!! Ensure your email and password are correct');
         return;
     }
 
@@ -99,11 +99,11 @@ app.get('/account/login/:email/:password', function (req, res) {
 
     if(account == null) {
         console.log('Unable to login for account', email);
-        res.send(account.value());
+        res.send('Unable to retrive details account for' + email);
     }
     else {
-        console.log('Successfully logged in', account.name);
-        res.send("Successfully logged in");
+        console.log('Successfully logged into account ' + account.name);
+        res.send('Successfully logged innto account ' + account.name);
     }
 
     // If success, return account object    
@@ -129,7 +129,7 @@ app.get('/account/get/:email', function (req, res) {
 
     if(account == null) {
         console.log('Unable to retrive details account for', email);
-        res.send(account.value());
+        res.send('Unable to retrive details account for' + email);
     }
     else {
         console.log('Successfully retrive account', account.name);
@@ -146,8 +146,8 @@ app.get('/account/deposit/:email/:amount', function (req, res) {
         .value();
 
     if(account == null) {
-        console.log('Unable to retrive details account for', email);
-        res.send(account.value());
+        console.log('Unable to retrive details account for' + email);
+        res.send('Unable to retrive details account for' + email);
         return;
     }
 
@@ -163,12 +163,12 @@ app.get('/account/deposit/:email/:amount', function (req, res) {
         .write();
 
     if(account == null) {
-        console.log('Unable to create account for', email);
-        res.send(account.value());
+        console.log('Unable to retrieve account for', email);
+        res.send('Unable to retrive details account for' + email);
     }
     else {
         console.log(account.name + '\'s balance was credited with ' + depositamount + ', new balance is ' +  account.balance);
-        res.send("success");
+        res.send('Success! ' + account.name + '\'s balance was credited with ' + depositamount + ', new balance is ' +  account.balance);
     }
     // YOUR CODE
     // Deposit amount for email
@@ -203,7 +203,7 @@ app.get('/account/withdraw/:email/:amount', function (req, res) {
     
     if(account == null) {
         console.log('Unable to withdraw from account account for', email);
-        res.send(account.value());
+        res.send('Unable to retrive details account for' + email);
     }
     else {
         console.log(account.name + '\'s balance was debited with ' + withdrawlamount + ', new balance is ' +  account.balance);
