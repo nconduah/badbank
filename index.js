@@ -203,8 +203,8 @@ app.get('/account/withdraw/:email/:amount', function (req, res) {
         .write();
     
     if(account == null) {
-        console.log('Unable to withdraw from account for', email);
-        res.send('Unable to retrive details account for' + email);
+        console.log('Unable to withdraw from account for ' + email);
+        res.send('Unable to retrive details account for ' + email);
     }
     else {
         console.log(account.name + '\'s balance was debited with ' + withdrawlamount + ', new balance is ' +  account.balance);
@@ -223,11 +223,11 @@ app.get('/account/transactions/:email', function (req, res) {
     var account = getAccount(email, { email: email });
 
     if(account == null) {
-        console.log('Unable to retrive transactionst for account', email);
-        res.send('Unable to retrive details account for', email);
+        console.log('Unable to retrive transactionst for account ' + email);
+        res.send('Unable to retrive details account for ' + email);
     }
     else {
-        console.log('Successfully retrieved transactions for', account.name);
+        console.log('Successfully retrieved transactions for ' + account.name);
         res.send(account.transactions);
     }
 
