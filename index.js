@@ -277,6 +277,6 @@ app.get('/account/balance/:email', function (req, res) {
 
 // start server
 // -----------------------
-app.listen(3000, function(){
-    console.log('Listening on 3000 for requests')
+app.listen(80, function(){
+    console.log('Listening on 80 for requests')
 })
